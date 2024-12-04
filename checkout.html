@@ -1,0 +1,347 @@
+<!DOCTYPE html>
+<html lang="it">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Pagamento - EasyScoop</title>
+    <style>
+        body {
+            font-family: 'Montserrat', sans-serif;
+            background-color: #f3f7fa;
+            margin: 0;
+            padding: 0;
+            color: #333;
+        }
+
+        header {
+            background-color: #ffffff;
+            padding: 1rem;
+            text-align: center;
+            border-bottom: 2px solid #e0e0e0;
+        }
+
+        .header-title {
+            font-size: 2rem;
+            font-weight: 900;
+            color: #4CAF50;
+            text-transform: uppercase;
+        }
+
+        .container {
+            max-width: 800px;
+            margin: 2rem auto;
+            background: #ffffff;
+            padding: 2rem;
+            border-radius: 10px;
+            box-shadow: 0 4px 10px rgba(0, 0, 0, 0.1);
+        }
+
+        .section-title {
+            font-size: 1.5rem;
+            font-weight: 700;
+            margin-bottom: 1rem;
+            color: #4CAF50;
+        }
+
+        form {
+            display: flex;
+            flex-direction: column;
+            gap: 1.5rem;
+        }
+
+        .form-group {
+            display: flex;
+            flex-direction: column;
+        }
+
+        .form-group label {
+            font-weight: 700;
+            margin-bottom: 0.5rem;
+        }
+
+        .form-group input {
+            padding: 0.8rem;
+            font-size: 1rem;
+            border: 1px solid #e0e0e0;
+            border-radius: 5px;
+        }
+
+        .form-group input:focus {
+            border-color: #4CAF50;
+            outline: none;
+        }
+
+        .checkout-summary {
+            margin-top: 2rem;
+            padding: 1rem;
+            background-color: #f9f9f9;
+            border: 1px solid #e0e0e0;
+            border-radius: 5px;
+        }
+
+        .checkout-summary p {
+            font-size: 1rem;
+            line-height: 1.5;
+            margin: 0.5rem 0;
+        }
+
+        .total {
+            font-size: 1.25rem;
+            font-weight: bold;
+            margin-top: 1rem;
+            color: #4CAF50;
+        }
+
+        .checkout-button {
+            font-weight: 700;
+            background-color: #4CAF50;
+            color: white;
+            padding: 1rem;
+            border: none;
+            border-radius: 5px;
+            font-size: 1.2rem;
+            cursor: pointer;
+            margin-top: 1rem;
+            transition: background-color 0.3s ease;
+        }
+
+        .checkout-button:hover {
+            background-color: #45a049;
+        }
+        .discount-section {
+              margin-top: 20px;
+              padding: 10px;
+              background: #f9f9f9;
+              border: 1px solid #ddd;
+              border-radius: 5px;
+            }
+            
+            .discount-section h3 {
+              margin: 0 0 10px;
+            }
+            
+            #discount-code {
+              padding: 10px;
+              width: 97%;
+              border: 1px solid #ddd;
+              border-radius: 5px;
+              font-size: 1rem;
+            }
+            
+            .apply-discount-button {
+              padding: 10px 20px;
+              background-color: #4CAF50;
+              color: white;
+              border: none;
+              border-radius: 5px;
+              cursor: pointer;
+              margin-left: 0; /* Imposta zero margine a sinistra */
+              margin-top: 10px; /* Aggiungi margine sopra */
+              display: block; /* Posiziona il bottone su una riga separata */
+            }
+            
+            .apply-discount-button:hover {
+              background-color: #45a049;
+            }
+            
+            .discount-message {
+              margin-top: 10px;
+              font-size: 0.9rem;
+              color: #333;
+            }
+            .discount-message.success {
+              color: #4CAF50;
+            }
+            .discount-message.error {
+              color: #e74c3c;
+            }
+            .christmas-promo {
+              background-color: #008080; /* Verde natalizio */
+              color: white;
+              padding: 15px;
+              text-align: center;
+              border-radius: 10px;
+              margin-bottom: 20px;
+              box-shadow: 0 4px 8px rgba(0, 0, 0, 0.2);
+            }
+            
+            .christmas-promo h2 {
+              font-size: 1.8rem;
+              margin-bottom: 10px;
+              font-weight: bold;
+            }
+            
+            .christmas-promo p {
+              font-size: 1.2rem;
+            }
+	#snow {
+  position: fixed;
+  top: 0;
+  left: 0;
+  width: 100%;
+  height: 100%;
+  pointer-events: none; /* Permette di cliccare sugli elementi sotto */
+  z-index: 1000; /* Lo sfondo della neve sarà sopra il resto */
+}
+    </style>
+</head>
+<body>
+    <header>
+        <h1 class="header-title">EasyScoop - Pagamento</h1>
+    </header>
+    <div id="christmas-promo" class="christmas-promo">
+  <h2>🎅 Risparmia questo Natale! 🎄</h2>
+  <p>Usa il codice <strong>NATALE20</strong> per ottenere il 20% di sconto.</p>
+</div>
+    <div class="container">
+        <h2 class="section-title">Informazioni di Spedizione</h2>
+        <form id="payment-form">
+            <div class="form-group">
+                <label for="full-name">Nome Completo</label>
+                <input type="text" id="full-name" name="fullName" placeholder="Mario Rossi" required>
+                <div id="discount-section" class="discount-section">
+            </div>
+            <div class="form-group">
+                <label for="address">Indirizzo</label>
+                <input type="text" id="address" name="address" placeholder="Via Roma 1" required>
+            </div>
+            <div class="form-group">
+                <label for="city">Città</label>
+                <input type="text" id="city" name="city" placeholder="Milano" required>
+            </div>
+            <div class="form-group">
+                <label for="postal-code">CAP</label>
+                <input type="text" id="postal-code" name="postalCode" placeholder="20100" required>
+            </div>
+
+            <h2 class="section-title">Metodo di Pagamento</h2>
+            <div class="form-group">
+                <label for="card-number">Numero Carta di Credito</label>
+                <input type="text" id="card-number" name="cardNumber" placeholder="1234 5678 9101 1121" required>
+            </div>
+            <div class="form-group">
+                <label for="expiration-date">Data di Scadenza</label>
+                <input type="text" id="expiration-date" name="expirationDate" placeholder="MM/AA" required>
+            </div>
+            <div class="form-group">
+                <label for="cvv">CVV</label>
+                <input type="password" id="cvv" name="cvv" placeholder="123" required>
+            </div>
+             <h3>Hai un codice sconto?</h3>
+  <input type="text" id="discount-code" placeholder="Inserisci il codice sconto" />
+  <button id="apply-discount" class="apply-discount-button">Applica</button>
+  <p id="discount-message" class="discount-message"></p>
+</div>
+
+            <div class="checkout-summary">
+                <p>Articoli nel carrello: <span id="cart-items">1</span></p>
+                <p>Totale: €<span id="cart-total">12.99</span></p>
+                <p class="total">Totale Pagamento: €<span id="payment-total">12.99</span></p>
+            </div>
+
+            <button type="submit" class="checkout-button">Completa Ordine</button>
+        </form>
+    </div>
+<script>
+ document.addEventListener("DOMContentLoaded", () => {
+  const snowCanvas = document.createElement("canvas");
+  snowCanvas.id = "snow";
+  document.body.appendChild(snowCanvas);
+
+  const ctx = snowCanvas.getContext("2d");
+  let width = (snowCanvas.width = window.innerWidth);
+  let height = (snowCanvas.height = window.innerHeight);
+  const flakes = [];
+
+  function createFlake() {
+    return {
+      x: Math.random() * width,
+      y: Math.random() * height,
+      radius: Math.random() * 4 + 1,
+      speed: Math.random() * 3 + 1,
+    };
+  }
+
+  for (let i = 0; i < 100; i++) flakes.push(createFlake());
+
+  function draw() {
+    ctx.clearRect(0, 0, width, height);
+    flakes.forEach((flake) => {
+      ctx.beginPath();
+      ctx.arc(flake.x, flake.y, flake.radius, 0, Math.PI * 2);
+      ctx.fillStyle = "white";
+      ctx.fill();
+    });
+  }
+
+  function update() {
+    flakes.forEach((flake) => {
+      flake.y += flake.speed;
+      if (flake.y > height) flake.y = 0;
+    });
+  }
+
+  function loop() {
+    draw();
+    update();
+    requestAnimationFrame(loop);
+  }
+
+  loop();
+});
+   document.addEventListener("DOMContentLoaded", () => {
+  const discountCodes = {
+    "SCOOP10": 10, // Codice sconto del 10%
+    "NATALE20": 20, // Codice sconto del 20%
+  };
+
+  const discountInput = document.getElementById("discount-code");
+  const applyButton = document.getElementById("apply-discount");
+  const discountMessage = document.getElementById("discount-message");
+  const cartTotalElement = document.getElementById("cart-total"); // Totale del carrello
+  const paymentTotalElement = document.getElementById("payment-total"); // Totale del pagamento
+
+  let cartTotal = parseFloat(cartTotalElement.textContent); // Ottieni il totale iniziale
+  let paymentTotal = parseFloat(paymentTotalElement.textContent); // Ottieni il totale di pagamento iniziale
+
+  applyButton.addEventListener("click", () => {
+    const code = discountInput.value.trim().toUpperCase();
+    if (discountCodes.hasOwnProperty(code)) {
+      const discountPercentage = discountCodes[code];
+      const discountAmount = (cartTotal * discountPercentage) / 100;
+      const newTotal = (cartTotal - discountAmount).toFixed(2);
+
+      // Aggiorna il totale del carrello
+      cartTotalElement.textContent = newTotal;
+
+      // Aggiorna il totale del pagamento
+      paymentTotalElement.textContent = newTotal;
+
+      // Mostra il messaggio di successo
+      discountMessage.textContent = `Codice sconto applicato! Hai risparmiato €${discountAmount.toFixed(2)} (${discountPercentage}%).`;
+      discountMessage.className = "discount-message success";
+    } else {
+      // Messaggio di errore
+      discountMessage.textContent = "Codice sconto non valido.";
+      discountMessage.className = "discount-message error";
+    }
+  });
+});
+    // Popolamento dinamico dei dati (opzionale, se il totale è dinamico)
+    document.addEventListener("DOMContentLoaded", () => {
+        const cartTotal = localStorage.getItem("cartTotal") || "12.99"; // Recupero del totale
+        document.getElementById("cart-total").textContent = cartTotal;
+        document.getElementById("payment-total").textContent = cartTotal;
+    });
+
+    // Gestione del form (esempio semplice)
+    document.getElementById("payment-form").addEventListener("submit", (e) => {
+        e.preventDefault();
+        alert("Pagamento completato con successo! L'ordine è stato inviato.");
+        // Qui si inviano i dati a un server o si integra un sistema di pagamento
+    });
+   
+</script>
+</html>
+
+
